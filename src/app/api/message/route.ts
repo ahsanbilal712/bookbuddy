@@ -1,0 +1,20 @@
+
+import { chatbotPrompt } from '@/app/helpers/constants/chatbot-prompt'
+import { ChatGPTMessage } from '@/lib/openai-stream'
+import { MessageArraycSchema } from '@/lib/validators/message'
+
+export async function POST(req: Request){
+    const {messages} = await req.json()
+
+    const parsedMessages = MessageArraycSchema.parse(messages)
+
+    const outBoundMessages: ChatGPTMessage[] = parsedMessages.map((message) => ({
+        role: message.isUserMessage ? 'user' : 'system', 
+        content: message.text,
+
+    }))
+    outBoundMessages.unshift({
+        role: 'system',
+        content: chatbotPrompt
+    })
+}
