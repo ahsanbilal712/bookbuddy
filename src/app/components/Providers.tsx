@@ -1,17 +1,21 @@
-"use-client";
+'@ts-nocheck'
+'use client'
 
-import { FC, ReactNode } from "react";
+import { ReactNode, useState } from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-interface ProvidersProps {
+interface ProviderProps {
   children: ReactNode;
 }
 
-const Providers: FC<ProvidersProps> = ({ children }) => {
-  const queryClient = new QueryClient();
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  )
+const Provider = ({ children }: ProviderProps) => {
+    const [client] = useState(() => new QueryClient());
+
+    return (
+        <QueryClientProvider client={client}>
+            {children}
+        </QueryClientProvider>
+    );
 };
 
-export default Providers;
+export default Provider;
