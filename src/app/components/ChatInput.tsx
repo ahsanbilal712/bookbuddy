@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils'
-import { useMutation,  } from '@tanstack/react-query';
+import { useMutation, } from '@tanstack/react-query';
 import { FC, HTMLAttributes, useState } from 'react'
 import { nanoid } from 'nanoid'
 import TextareaAutosize from "react-textarea-autosize"
@@ -14,22 +14,31 @@ interface ChatInputProps extends HTMLAttributes<HTMLDivElement> {
 const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
     const [input, setInput] = useState<string>('')
 
-    const {mutate: sendMessage, isLoading} = useMutation({
-        mutationFn: async (message: Message) =>{
+    const { mutate: sendMessage, isLoading } = useMutation({
+        mutationFn: async (message: Message) => {
             const response = await fetch('/api/message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({messages: 'hello'}),
+                body: JSON.stringify({ messages: [message] }),
 
-            
+
             })
             return response.body
         },
-        onSuccess: () => {
-            console.log("success")
-        }
+        onSuccess: async (stream) => {
+            if (!stream) throw new Error('No stream')
+            const reader = stream.getReader()
+            const decoder = new TextDecoder()
+            let done = false
+            while (!done) {
+                const { value, done: doneReading } = await reader.read()
+                done = doneReading
+                const chunkValue = decoder.decode(value)
+                console.log(chunkValue)
+            }
+        },
     })
 
     return <div {...props} className={cn('border-t border-zinc-300', className)}>
@@ -37,7 +46,7 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
             <TextareaAutosize
                 rows={2}
                 onKeyDown={(e) => {
-                    if(e.key === 'Enter' && !e.shiftKey) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault()
 
                         const message: Message = {
