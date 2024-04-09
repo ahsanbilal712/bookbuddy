@@ -19,4 +19,5 @@
 - Conditional classes with clsx
 
 ## Screenshots
-<img width="321" alt="Screenshot 2024-04-09 at 5 14 30 PM" src="https://github.com/ahsanbilal712/bookbuddy/assets/93867941/a4b17646-a247-4e96-896d-2e17582d1985">
+<img width="446" alt="image" src="https://github.com/ahsanbilal712/bookbuddy/assets/93867941/a21243ba-d98f-4e97-8835-2610e0e40f34">
+
