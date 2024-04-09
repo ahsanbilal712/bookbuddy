@@ -3,6 +3,7 @@
 
 import { ReactNode, useState } from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MessagesProvider } from '@/context/messages';
 
 interface ProviderProps {
   children: ReactNode;
@@ -13,7 +14,7 @@ const Provider = ({ children }: ProviderProps) => {
 
     return (
         <QueryClientProvider client={client}>
-            {children}
+           <MessagesProvider>{children}</MessagesProvider> 
         </QueryClientProvider>
     );
 };
